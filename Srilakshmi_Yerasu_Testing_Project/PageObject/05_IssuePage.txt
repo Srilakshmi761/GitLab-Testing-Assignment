@@ -1,0 +1,82 @@
+
+#******************** Settings ************************
+
+*** Settings ***
+Documentation	Issue Test scenario. CRUD Operation: Create, Read, Update, Delete
+
+# TODO: Write Precondition and Postcondition, Tags 
+
+Pre Condition   Project must be created by the user before 
+Post Condition	Issue is created/updated/deleted successfully
+Tags	Issue, TS-4-Issue
+
+#******************* Common Variables ********************
+
+
+*** Variables ***
+
+IssueUrl = https://gitlab.com/srilakshmi2/Testing-project/-/work_items?sort=created_date&state=opened&first_page_size=20
+Valid_IssueName = issue1
+Updated_IssueName = issue2
+Empty =
+
+
+
+#******************** Test Cases *************************
+
+*** Test Case ***
+
+
+# Positive Test Cases
+
+Create Issue
+    Navigate To Project Page
+    Go to project and select Pinned
+    Select Work Items
+    Click on New Item
+    Input Issue Name    Valid_IssueName
+    Submit Issue Form
+    Verify Issue Created Message Is Displayed
+
+
+Update Name Of Issue
+    Open Existing Issue
+    Click Edit Option On Top
+    Input Issue Name    Updated_IssueName
+    Save Changes
+    Verify Issue Name Is Updated Successfully
+
+
+Delete First Issue
+    Open Issue By Clicking On It
+    Click Settings (Three dots on right)
+    Click Delete Issue
+	Alert box display to Confirm deletion
+    Confirm Deletion by click on delete Issue
+    Verify Issue Is Deleted Successfully
+
+
+Issue Closing
+    Open Issue
+    Click Close Issue Button
+    Verify Issue Status Is Closed
+
+
+# Negative Tests
+
+
+Create Issue With Empty Name
+    Navigate To Project Page
+    Go to project and select Pinned
+    Select Work Items
+    Click on New Item
+    Input Issue Name    Empty
+    Submit Issue Form
+    Verify Page Should Contain A title is required
+
+Create Issue With Very Long Title
+    Navigate To Issue Page
+    Click on New Item
+    Input Issue Name    <more than 225 characters>
+    Submit Issue Form
+    Verify Page Should Contain Title is too long (maximum is 255 characters)
