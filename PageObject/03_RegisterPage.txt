@@ -1,0 +1,134 @@
+
+#******************** Settings ************************
+
+*** Settings ***
+
+# TODO: Write Documentation e.g. User Registration Test scenario with verification, valid and invalid credentials.
+
+Documentation	
+
+# TODO: Write Precondition, Postcondition, Tags
+
+Pre Condition	Open Browser
+Post Condition	Close All Browsers
+Tags  Register, TS-2-Register
+
+#******************* Common Variables ********************
+
+*** Variables ***
+
+# NOTE: Please Remove your login credential before uploading Assignments
+
+# TODO: Write Registration field variables
+
+RegisterUrl = https://gitlab.com/users/sign_up
+
+Valid_FirstName= 
+Valid_LastName= 
+Valid_Username=
+Existing_Username=
+Valid_Email= 
+Valid_Password= 
+
+Invalid_Email= 
+Weak_Password= 
+
+Existing_Email= 
+
+
+#******************** Test Cases *************************
+
+*** Test Case ***
+
+# Positive Tests
+
+Register With Valid Credentials
+    Navigate To Register Page  RegisterUrl
+    Input First Name    Valid_FirstName
+    Input Last Name     Valid_LastName
+    Input Username      Valid_Username
+    Input Email         Valid_Email
+    Input Password      Valid_Password
+    Submit Register Form
+    Verify User Is Redirected To Verification Code Page
+
+# Negative Test 
+
+Register With All Required Fields Empty
+    Navigate To Register Page  RegisterUrl
+    Input First Name    Empty
+    Input Last Name     Empty
+    Input Username      Empty
+    Input Email         Empty
+    Input Password      Empty
+    Submit Register Form
+    Verify Page Should Contain This field is required
+    Verify Page Should Contain Please provide a valid email address
+
+Register With Invalid Username
+    Navigate To Register Page  RegisterUrl
+    Input First Name    Valid_FirstName
+    Input Last Name     Valid_LastName
+    Input Username      user@123
+    Input Email         Valid_Email
+    Input Password      Valid_Password
+    Submit Register Form
+    Verify Page Should Contain Please create a username with only alphanumeric characters.
+
+Register With Already Taken Username
+    Navigate To Register Page  RegisterUrl
+    Input First Name    Valid_FirstName
+    Input Last Name     Valid_LastName
+    Input Username      Existing_Username
+    Input Email         Valid_Email
+    Input Password      Valid_Password
+    Submit Register Form
+    Verify Page Should Contain Username is already taken
+
+Register With Weak Password (Too Short)
+    Navigate To Register Page  RegisterUrl
+    Input First Name    Valid_FirstName
+    Input Last Name     Valid_LastName
+    Input Username      Valid_Username
+    Input Email         Valid_Email
+    Input Password      12345
+    Submit Register Form
+    Verify Page Should Contain Must be between 8-128 characters
+
+
+Register With Invalid Email Format
+    Navigate To Register Page  RegisterUrl
+    Input First Name    Valid_FirstName
+    Input Last Name     Valid_LastName
+    Input Username      Valid_Username
+    Input Email         Invalid_Email
+    Input Password      Valid_Password
+    Submit Register Form
+    Verify User Is Redirected To Verification Code Page
+    Verify Page Contains Email confirmation instruction message
+
+Register With Already Existing Email
+    Navigate To Register Page  RegisterUrl
+    Input First Name    Valid_FirstName
+    Input Last Name     Valid_LastName
+    Input Username      Valid_Username
+    Input Email         Existing_Email
+    Input Password      Valid_Password
+    Submit Register Form
+    Verify Page Should Contain Email has already been taken
+
+Register Without Completing Security Verification Properly
+    Navigate To Register Page  RegisterUrl
+    Input First Name    Valid_FirstName
+    Input Last Name     Valid_LastName
+    Input Username      Valid_Username
+    Input Email         Valid_Email
+    Input Password      Valid_Password
+    Submit Register Form
+    Observe Security Verification Popup Window
+    Complete Security Check
+    Verify User Is Redirected To Email Verification Code Page
+
+
+
+
